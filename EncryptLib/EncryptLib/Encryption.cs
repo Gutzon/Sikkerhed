@@ -11,9 +11,9 @@ namespace EncryptLib
 {
     public class Keyexchange
     {
-        public double p = 1729;
-        public double publickey;
-        int priNum;
+        public double p = 1729;         //public number, should have been a prime number
+        public double publickey;        //public key
+        int priNum;                     //private key
         Random ran = new Random();
 
         public Keyexchange()
@@ -21,28 +21,28 @@ namespace EncryptLib
             generatekeys();
         }
 
-        public void generatekeys()
+        public void generatekeys()              //generates private and one side of the public key
         {
             priNum = ran.Next(1, 10);
             publickey = ran.Next(0, 20);
         }
-        public double generatepublickey(double publickey)
+        public double generatepublickey(double publickey)       //combine both public keys to give the real public key
         {
             this.publickey += publickey;
             return this.publickey;
         }
-        public void CheckP(double prime)
+        public void CheckP(double prime)                    //checking for which public number (p) it should use
         {
             if (prime > this.p)
             {
                 this.p = prime;
             }
         }
-        public double Sendkey()
+        public double Sendkey()                         //Generates it's private key compined with the public key and number to give the other end
         {
             return (double)((decimal)(Math.Pow(publickey, priNum)) % (decimal)p);
         }
-        public double generatekey(double otherkey)
+        public double generatekey(double otherkey)         //uses the public combined private key of the other to get the real key
         {
             return (double)((decimal)(Math.Pow(otherkey, priNum)) % (decimal)p);
         }
@@ -52,10 +52,10 @@ namespace EncryptLib
     public class Encryption
     {
         List<char> abc = new List<char>("keya78bcdfjlmnopXSqrsxz0123RTGBN69½§!\"@#£¤ $%&/{(tuvw[])}=+?´`|¨^~'*-_.:;,åøæ<>\\QAZWEDC45VFHYUJMKIOLÆPÅØöÖäghiÄôÔâÂíÍìÌóÓ");
-        List<char> playfairCipher = new List<char>();
+        List<char> playfairCipher = new List<char>();               //My Playfair Ciphe char list
         public Aes myAes = Aes.Create();
 
-        private void generate(string keyword)
+        private void generate(string keyword)           //Generate my version of Playfair Ciphe 
         {
             List<char> abc = new List<char>(this.abc);
             int shift = shiftsum(keyword);
@@ -70,8 +70,8 @@ namespace EncryptLib
             foreach (char c in abc)
             {
                 playfairCipher.Add(c);
-            }
-            byte[] mynewkey = new byte[32];
+            }                                       //Done with Playfair Ciphe
+            byte[] mynewkey = new byte[32];         //Starts generating AES.Key and AES.IV using my keyword and my Playfair Ciphe char list
             byte[] mynewiv = new byte[16];
             int i = shift;
             if (keyword.Length >= 32)
@@ -85,7 +85,7 @@ namespace EncryptLib
             while (keyword.Length < 32)
             {
                 keyword += playfairCipher[i].ToString();
-                i += shift;   
+                i += shift;
                 if (i >= playfairCipher.Count)
                 {
                     i -= playfairCipher.Count;
@@ -109,29 +109,27 @@ namespace EncryptLib
                 }
                 i += 1;
             }
-            //byte[] mynewkey2 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 };
-            //byte[] mynewiv2 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
 
             myAes.Key = mynewkey;
-            myAes.IV = mynewiv;
+            myAes.IV = mynewiv;                         //Done generating the Key and IV
 
         }
         public string AESencrypted(string text)
         {
-            byte[] bytes = EncryptStringToBytes_Aes(text, myAes.Key, myAes.IV);
-            string v = "";
+            byte[] bytes = EncryptStringToBytes_Aes(text, myAes.Key, myAes.IV);        //encryts it into bytes
+            string v = "";                                                             //Write bytes into a string with extra char to split it up
             foreach (byte b in bytes)
             {
                 v += "[" + b.ToString() + "]";
-            }
+            }                                                                          //Done and gives the encrypted back
             return v;
         }
         public string AESdecrypted(string message)
         {
-            List<byte> lbytes = new List<byte>();
+            List<byte> lbytes = new List<byte>();                                                                   //Splits the string back up into the bytes it was
             while (message.Length > 0)
             {
-                lbytes.Add(Byte.Parse(message.Substring(message.IndexOf("[") + 1, message.IndexOf("]")-1)));
+                lbytes.Add(Byte.Parse(message.Substring(message.IndexOf("[") + 1, message.IndexOf("]") - 1)));
                 message = message.Substring(message.IndexOf("]") + 1, message.Length - message.IndexOf("]") - 1);
             }
             byte[] bytes = new byte[lbytes.Count];
@@ -140,12 +138,12 @@ namespace EncryptLib
             {
                 bytes[i] = lbytes[i];
                 i += 1;
-            }
+            }                                                                                                       //Done
 
 
-            return DecryptStringFromBytes_Aes(bytes, myAes.Key, myAes.IV);
+            return DecryptStringFromBytes_Aes(bytes, myAes.Key, myAes.IV);                                          //Decrypts the bytes and sends back the unencrypted string
         }
-        private (char, char) Playenen(char c, char j)
+        private (char, char) Playenen(char c, char j)               // My Playfair Ciphe Encryptions rules for two chars
         {
             int cre = 0;
             int jre = 0;
@@ -192,65 +190,7 @@ namespace EncryptLib
 
             return (playfairCipher[cre], playfairCipher[jre]);
         }
-        public string encrypt(string text)
-        {
-            int shift = shiftsum(text);
-            List<char> cry = new List<char>();
-            foreach (char c in text)
-            {
-                if (!abc.Contains(c))
-                {
-                    cry.Add(c);
-                }
-                else if (playfairCipher.IndexOf(c) + shift >= abc.Count)
-                {
-                    cry.Add(playfairCipher[playfairCipher.IndexOf(c) + shift - abc.Count]);
-                }
-                else
-                {
-                    cry.Add(playfairCipher[playfairCipher.IndexOf(c) + shift]);
-                }
-            }
-            int doub = 0;
-            while (doub < 1)
-            {
-
-
-                int i = doub;
-                while (i < cry.Count && true)
-                {
-                    if ((i + 1) >= cry.Count)
-                    {
-                        i = cry.Count;
-                    }
-                    else
-                    {
-                        while (!abc.Contains(cry[i]))
-                        {
-                            i += 1;
-                        }
-                        int j = i + 1;
-                        while (!abc.Contains(cry[j]))
-                        {
-                            j += 1;
-                        }
-                        (char, char) p = Playenen(cry[i], cry[j]);
-                        cry[i] = p.Item1;
-                        cry[j] = p.Item2;
-                        i = j + 1;
-                    }
-                }
-                doub += 1;
-            }
-            string v = "";
-            foreach (char c in cry)
-            {
-                v += c;
-            }
-
-            return v;
-        }
-        private (char, char) Playende(char c, char j)
+        private (char, char) Playende(char c, char j)           // My Playfair Ciphe Decryptions rules for two chars
         {
             int cre = 0;
             int jre = 0;
@@ -297,7 +237,59 @@ namespace EncryptLib
 
             return (playfairCipher[cre], playfairCipher[jre]);
         }
-        public string decrypt(string text)
+        public string encrypt(string text)
+        {
+            int shift = shiftsum(text);
+            List<char> cry = new List<char>();
+            foreach (char c in text)                //Validates chars for and shifts charectors.
+            {
+                if (!abc.Contains(c))
+                {
+                    cry.Add(c);
+                }
+                else if (playfairCipher.IndexOf(c) + shift >= abc.Count)
+                {
+                    cry.Add(playfairCipher[playfairCipher.IndexOf(c) + shift - abc.Count]);
+                }
+                else
+                {
+                    cry.Add(playfairCipher[playfairCipher.IndexOf(c) + shift]);
+                }
+            }                                       //done
+            int i = 0;
+            while (i < cry.Count && true)           //Finds the two chars to run through My Playfair Ciphe
+            {
+                if ((i + 1) >= cry.Count)
+                {
+                    i = cry.Count;
+                }
+                else
+                {
+                    while (!abc.Contains(cry[i]))
+                    {
+                        i += 1;
+                    }
+                    int j = i + 1;
+                    while (!abc.Contains(cry[j]))
+                    {
+                        j += 1;
+                    }
+                    (char, char) p = Playenen(cry[i], cry[j]);
+                    cry[i] = p.Item1;
+                    cry[j] = p.Item2;
+                    i = j + 1;
+                }
+            }                                                   //done
+            string v = "";
+            foreach (char c in cry)                             //Places it into a string and returns it
+            {
+                v += c;
+            }
+
+            return v;
+        }
+
+        public string decrypt(string text)                  //Doing almost the same as encrypt but in reverse
         {
             int shift = shiftsum(text);
             List<char> cry = new List<char>(text);
@@ -349,7 +341,7 @@ namespace EncryptLib
 
             return v;
         }
-        int shiftsum(string text)
+        int shiftsum(string text)               //Finds out the Total Digit Sum of length of the string. Exemple   123 = 6.
         {
             int shift = text.Length;
             while (shift >= 10)
@@ -450,7 +442,7 @@ namespace EncryptLib
                             }
                             // Read the decrypted bytes from the decrypting stream
                             // and place them in a string.
-                            
+
                         }
                     }
                 }

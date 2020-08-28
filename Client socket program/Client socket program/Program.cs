@@ -2,9 +2,6 @@
 using System.Net.Sockets;
 using System.Net;
 using System.Text;
-using Microsoft.VisualBasic.CompilerServices;
-using System.Collections.Generic;
-using System.Linq;
 using EncryptLib;
 
 namespace Client_socket_program
@@ -13,23 +10,23 @@ namespace Client_socket_program
     {
         static void Main(string[] args)
         {
-            TcpClient client = new TcpClient();
+            TcpClient client = new TcpClient();                         //My connection setup
 
             int port = 13356;
             IPAddress ip = IPAddress.Parse("127.0.0.1");
             IPEndPoint endPoint = new IPEndPoint(ip, port);
 
             client.Connect(endPoint);
-            NetworkStream stream = client.GetStream();
+            NetworkStream stream = client.GetStream();                 //Connected
             Encryption cryp = new Encryption(keychat(stream));
             string message = "";
-            while (client.Connected)
+            while (client.Connected)                                    //My loop for checking if it need to read a message or send one.
             {
                 if (stream.DataAvailable)
                 {
                     Console.WriteLine(cryp.decrypt(ReadMessage(stream)));
                 }
-                else if (Console.KeyAvailable)
+                else if (Console.KeyAvailable)                                  //Generate my message to send
                 {
                     
                     ConsoleKeyInfo keypressed = Console.ReadKey();
@@ -37,6 +34,7 @@ namespace Client_socket_program
                     {
                         SendMessage(stream, cryp.AESencrypted(message));
                         Console.WriteLine(message);
+                        Console.WriteLine(cryp.AESencrypted(message));
                         message = "";
                     }
                     else if (keypressed.Key == ConsoleKey.Backspace)
@@ -49,7 +47,7 @@ namespace Client_socket_program
                     else
                     {
                         message += keypressed.KeyChar.ToString();
-                    }
+                    }                                                               //End of generating my message to send
                 }
 
             }
@@ -57,12 +55,12 @@ namespace Client_socket_program
             client.Close();
 
         }
-        static void SendMessage(NetworkStream stream, string message)
+        static void SendMessage(NetworkStream stream, string message)   //My send message to the stream
         {
             byte[] buffer = Encoding.UTF8.GetBytes(message);
             stream.Write(buffer, 0, buffer.Length);
         }
-        static string ReadMessage(NetworkStream stream)
+        static string ReadMessage(NetworkStream stream)                 //My read message from the stream
         {
             byte[] buffer = new byte[256];
 
@@ -70,7 +68,7 @@ namespace Client_socket_program
             return Encoding.UTF8.GetString(buffer, 0, numberOfBytesRead);
             
         }
-        static string keychat(NetworkStream stream)
+        static string keychat(NetworkStream stream)         //Diffie Helman communication
         {
             double key;
             double tal;
@@ -84,7 +82,6 @@ namespace Client_socket_program
             tal = Double.Parse(ReadMessage(stream));
             SendMessage(stream, keyex.Sendkey().ToString());
             key = keyex.generatekey(Double.Parse(tal.ToString()));
-
 
             Console.WriteLine(key.ToString());
 

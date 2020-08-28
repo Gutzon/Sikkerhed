@@ -10,7 +10,7 @@ namespace Server_socket_program
     {
         static void Main(string[] args)
         {
-            int port = 13356;
+            int port = 13356;                                       //My connection setup
             IPAddress ip = IPAddress.Parse("127.0.0.1");
             IPEndPoint localEndpoint = new IPEndPoint(ip, port);
 
@@ -20,23 +20,24 @@ namespace Server_socket_program
             Console.WriteLine("Awaiting Clients");
             TcpClient client = listener.AcceptTcpClient();
             Console.WriteLine("Client Connected");
-            NetworkStream stream = client.GetStream();
+            NetworkStream stream = client.GetStream();                 //Connected
             Encryption cryp = new Encryption(keychat(stream));
             string message = "";
-            while (client.Connected)
+            while (client.Connected)                                 //My loop for checking if it need to read a message or send one.
             {
 
                 if (stream.DataAvailable)
                 {
                     Console.WriteLine(cryp.AESdecrypted(ReadMessage(stream)));
                 }
-                else if (Console.KeyAvailable)
+                else if (Console.KeyAvailable)                                      //Generate my message to send
                 {
                     ConsoleKeyInfo keypressed = Console.ReadKey();
                     if (keypressed.Key == ConsoleKey.Enter && message.Length > 0)
                     {
                         SendMessage(stream, cryp.encrypt(message));
                         Console.WriteLine(message);
+                        Console.WriteLine(cryp.encrypt(message));
                         message = "";
                     }
                     else if (keypressed.Key == ConsoleKey.Backspace)
@@ -49,7 +50,7 @@ namespace Server_socket_program
                     else
                     {
                         message += keypressed.KeyChar.ToString();
-                    }
+                    }                                                               //End of generating my message to send
                 }
 
             
@@ -57,12 +58,12 @@ namespace Server_socket_program
             }
 
         }
-        static void SendMessage(NetworkStream stream, string message)
+        static void SendMessage(NetworkStream stream, string message)      //My send message to the stream
         {
             byte[] buffer = Encoding.UTF8.GetBytes(message);
             stream.Write(buffer, 0, buffer.Length);
         }
-        static string ReadMessage(NetworkStream stream)
+        static string ReadMessage(NetworkStream stream)                     //My read message from the stream
         {
             byte[] buffer = new byte[256];
 
@@ -70,7 +71,7 @@ namespace Server_socket_program
             return Encoding.UTF8.GetString(buffer, 0, numberOfBytesRead);
 
         }
-        static string keychat(NetworkStream stream)
+        static string keychat(NetworkStream stream)                     //Diffie Helman communication
         {
             double key;
             Keyexchange keyex = new Keyexchange();
