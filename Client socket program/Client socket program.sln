@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client socket program", "Client socket program\Client socket program.csproj", "{BC532A64-4CC5-4A36-89A2-11378CE432B2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptLib", "..\EncryptLib\EncryptLib\EncryptLib.csproj", "{8AA2CB56-0F73-4923-8E88-FD6204C368DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC532A64-4CC5-4A36-89A2-11378CE432B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC532A64-4CC5-4A36-89A2-11378CE432B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC532A64-4CC5-4A36-89A2-11378CE432B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC532A64-4CC5-4A36-89A2-11378CE432B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AA2CB56-0F73-4923-8E88-FD6204C368DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AA2CB56-0F73-4923-8E88-FD6204C368DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AA2CB56-0F73-4923-8E88-FD6204C368DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AA2CB56-0F73-4923-8E88-FD6204C368DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E2AEFE75-10EC-4D10-8793-70210B1A3686}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptLib", "EncryptLib\EncryptLib.csproj", "{FDD688D5-7F5D-4DFD-B37D-88D58707E349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{B9D43975-CC5B-4CCA-9C85-A33A48297B75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDD688D5-7F5D-4DFD-B37D-88D58707E349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDD688D5-7F5D-4DFD-B37D-88D58707E349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDD688D5-7F5D-4DFD-B37D-88D58707E349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDD688D5-7F5D-4DFD-B37D-88D58707E349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9D43975-CC5B-4CCA-9C85-A33A48297B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9D43975-CC5B-4CCA-9C85-A33A48297B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9D43975-CC5B-4CCA-9C85-A33A48297B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9D43975-CC5B-4CCA-9C85-A33A48297B75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55E6289A-18C6-47BB-98D4-6B60CC3128E5}
+	EndGlobalSection
+EndGlobal
